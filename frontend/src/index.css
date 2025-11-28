@@ -1,0 +1,582 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #faf5ff;
+  }
+  
+  /* Global purple theme overrides */
+  .bg-blue-50 { background-color: #faf5ff !important; }
+  .bg-blue-100 { background-color: #f3e8ff !important; }
+  .bg-blue-500 { background-color: #a855f7 !important; }
+  .bg-blue-600 { background-color: #9333ea !important; }
+  .bg-blue-700 { background-color: #7c3aed !important; }
+  .bg-blue-800 { background-color: #6b21a8 !important; }
+  
+  .text-blue-500 { color: #a855f7 !important; }
+  .text-blue-600 { color: #9333ea !important; }
+  .text-blue-700 { color: #7c3aed !important; }
+  .text-blue-800 { color: #6b21a8 !important; }
+  .text-blue-900 { color: #581c87 !important; }
+  
+  .border-blue-200 { border-color: #e9d5ff !important; }
+  .border-blue-300 { border-color: #d8b4fe !important; }
+  .border-blue-500 { border-color: #a855f7 !important; }
+  
+  .ring-blue-500 { --tw-ring-color: #a855f7 !important; }
+  .focus\:ring-blue-500:focus { --tw-ring-color: #a855f7 !important; }
+  
+  .hover\:bg-blue-700:hover { background-color: #7c3aed !important; }
+  .hover\:bg-blue-800:hover { background-color: #6b21a8 !important; }
+  .hover\:text-blue-800:hover { color: #6b21a8 !important; }
+  .hover\:text-blue-900:hover { color: #581c87 !important; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply bg-purple-100 text-purple-800 px-4 py-2 rounded-lg hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 border border-purple-100;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Remove browser headers and footers */
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  
+  html, body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+  
+  /* Hide all elements except printable content */
+  body * {
+    visibility: hidden;
+  }
+  
+  .printable, .printable * {
+    visibility: visible;
+  }
+  
+  .printable {
+    position: static !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 15mm !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+  }
+  
+  /* Preserve template colors in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Template specific print colors */
+  .bg-blue-600 { background-color: #2563eb !important; color: white !important; }
+  .bg-purple-600 { background-color: #9333ea !important; color: white !important; }
+  .bg-green-600 { background-color: #16a34a !important; color: white !important; }
+  .bg-orange-600 { background-color: #ea580c !important; color: white !important; }
+  .bg-indigo-600 { background-color: #4f46e5 !important; color: white !important; }
+  .bg-red-600 { background-color: #dc2626 !important; color: white !important; }
+  .bg-teal-600 { background-color: #0d9488 !important; color: white !important; }
+  .bg-gray-800 { background-color: #1f2937 !important; color: white !important; }
+  .bg-gray-50 { background-color: #f9fafb !important; }
+  
+  /* Text colors */
+  .text-blue-600 { color: #2563eb !important; }
+  .text-purple-600 { color: #9333ea !important; }
+  .text-green-600 { color: #16a34a !important; }
+  .text-orange-600 { color: #ea580c !important; }
+  .text-indigo-600 { color: #4f46e5 !important; }
+  .text-red-600 { color: #dc2626 !important; }
+  .text-teal-600 { color: #0d9488 !important; }
+  .text-gray-800 { color: #1f2937 !important; }
+  .text-white { color: white !important; }
+  
+  /* Ensure borders are visible */
+  table, th, td {
+    border: 1px solid #000 !important;
+  }
+  
+  /* Table styling */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 10px 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  th, td {
+    padding: 6px !important;
+    text-align: left !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+  
+  th {
+    background-color: #1f2937 !important;
+    color: white !important;
+    font-weight: bold !important;
+  }
+  
+  /* Grid layouts */
+  .grid {
+    display: block !important;
+  }
+  
+  .grid-cols-2 > * {
+    display: inline-block !important;
+    width: 48% !important;
+    vertical-align: top !important;
+  }
+  
+  .grid-cols-2 > *:nth-child(2) {
+    float: right !important;
+  }
+  
+  /* Spacing */
+  .mb-6 { margin-bottom: 15px !important; }
+  .mb-4 { margin-bottom: 10px !important; }
+  .mb-2 { margin-bottom: 5px !important; }
+  .p-8 { padding: 15px !important; }
+  .p-6 { padding: 10px !important; }
+  .p-4 { padding: 8px !important; }
+  .p-3 { padding: 6px !important; }
+  
+  /* Typography */
+  .text-2xl { font-size: 18px !important; }
+  .text-xl { font-size: 16px !important; }
+  .text-lg { font-size: 14px !important; }
+  .text-sm { font-size: 11px !important; }
+  .text-xs { font-size: 10px !important; }
+  
+  /* Hide sticky elements */
+  .sticky {
+    position: relative !important;
+  }
+  
+  /* Page breaks */
+  .page-break {
+    page-break-before: always;
+  }
+  
+  /* Prevent page breaks inside important elements */
+  .grid-cols-2, .border-t {
+    page-break-inside: avoid !important;
+  }
+  
+  /* Ensure proper spacing for signatures */
+  .border-t {
+    border-top: 1px solid #000 !important;
+    margin-top: 30px !important;
+    padding-top: 5px !important;
+  }
+}
+
+/* PDF Generation Specific Styles */
+#invoice-preview, #invoice-template, #temp-invoice-preview {
+  width: 210mm !important;
+  max-width: 210mm !important;
+  font-family: Arial, sans-serif !important;
+  background: white !important;
+  padding: 20px !important;
+  min-height: 297mm !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+}
+
+/* Mobile Invoice Preview Fixes */
+@media (max-width: 768px) {
+  #invoice-preview, #invoice-template, #temp-invoice-preview {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 320px !important;
+    padding: 10px !important;
+    margin: 0 !important;
+    min-height: auto !important;
+    transform: none !important;
+    zoom: 1 !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
+  
+  #invoice-preview .overflow-x-auto, 
+  #invoice-template .overflow-x-auto, 
+  #temp-invoice-preview .overflow-x-auto {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-x: auto !important;
+  }
+  
+  #invoice-preview table, 
+  #invoice-template table, 
+  #temp-invoice-preview table {
+    min-width: 500px !important;
+    font-size: 10px !important;
+  }
+  
+  #invoice-preview th, 
+  #invoice-template th, 
+  #temp-invoice-preview th,
+  #invoice-preview td, 
+  #invoice-template td, 
+  #temp-invoice-preview td {
+    padding: 4px !important;
+    font-size: 10px !important;
+    white-space: nowrap !important;
+  }
+}
+
+#invoice-preview table, #invoice-template table, #temp-invoice-preview table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 10px 0 !important;
+  font-size: 11px !important;
+  page-break-inside: avoid !important;
+}
+
+#invoice-preview th, #invoice-template th, #temp-invoice-preview th,
+#invoice-preview td, #invoice-template td, #temp-invoice-preview td {
+  padding: 6px !important;
+  border: 1px solid #000 !important;
+  text-align: left !important;
+  word-wrap: break-word !important;
+  vertical-align: top !important;
+  line-height: 1.3 !important;
+}
+
+#invoice-preview th, #invoice-template th, #temp-invoice-preview th {
+  background-color: #1f2937 !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  font-size: 10px !important;
+}
+
+/* Prevent text overflow in PDF */
+#invoice-preview .overflow-hidden, #invoice-template .overflow-hidden, #temp-invoice-preview .overflow-hidden {
+  overflow: visible !important;
+}
+
+#invoice-preview .truncate, #invoice-template .truncate, #temp-invoice-preview .truncate {
+  white-space: normal !important;
+  text-overflow: unset !important;
+}
+
+/* Ensure signatures and terms are visible */
+#invoice-preview .grid-cols-2, #invoice-template .grid-cols-2, #temp-invoice-preview .grid-cols-2 {
+  page-break-inside: avoid !important;
+  margin-top: 20px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+#invoice-preview .grid-cols-2 > *, #invoice-template .grid-cols-2 > *, #temp-invoice-preview .grid-cols-2 > * {
+  width: 48% !important;
+}
+
+#invoice-preview .border-t, #invoice-template .border-t, #temp-invoice-preview .border-t {
+  border-top: 1px solid #000 !important;
+  margin-top: 30px !important;
+  padding-top: 8px !important;
+}
+
+/* Better spacing for print */
+#invoice-preview .mb-6, #invoice-template .mb-6, #temp-invoice-preview .mb-6 {
+  margin-bottom: 15px !important;
+}
+
+#invoice-preview .p-8, #invoice-template .p-8, #temp-invoice-preview .p-8 {
+  padding: 15px !important;
+}
+
+#invoice-preview .p-6, #invoice-template .p-6, #temp-invoice-preview .p-6 {
+  padding: 10px !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c084fc;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a855f7;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+/* Print-specific invoice layout */
+@media print {
+  #invoice-preview, #invoice-template, #temp-invoice-preview {
+    transform: scale(1) !important;
+    transform-origin: top left !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 15mm !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Responsive layout fixes */
+@media (max-width: 1024px) {
+  .lg\:w-64 {
+    width: 16rem;
+  }
+  
+  .lg\:flex-shrink-0 {
+    flex-shrink: 0;
+  }
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .sidebar-mobile {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-mobile.open {
+    transform: translateX(0);
+  }
+  
+  /* Ensure content doesn't overflow on mobile */
+  .min-w-0 {
+    min-width: 0;
+  }
+  
+  /* Better mobile spacing */
+  .space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+  
+  .space-y-6 > * + * {
+    margin-top: 1.5rem;
+  }
+}
+
+/* Prevent horizontal scroll and ensure proper mobile behavior */
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Improve mobile viewport */
+@viewport {
+  width: device-width;
+  initial-scale: 1;
+}
+
+/* Ensure main content doesn't get squeezed */
+main {
+  min-width: 0;
+  flex: 1;
+}
+
+/* Fix for sticky elements on mobile */
+@media (max-width: 1023px) {
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+/* Better button responsiveness */
+@media (max-width: 640px) {
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  
+  .w-full {
+    width: 100%;
+  }
+  
+  .sm\:w-auto {
+    width: auto;
+  }
+  
+  .sm\:flex-1 {
+    flex: 1;
+  }
+  
+  /* Mobile-first form improvements */
+  .grid {
+    gap: 0.75rem;
+  }
+  
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  /* Better mobile padding */
+  .p-6 {
+    padding: 1rem;
+  }
+  
+  .p-4 {
+    padding: 0.75rem;
+  }
+  
+  /* Mobile typography */
+  .text-3xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  .text-xl {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 768px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Better mobile forms */
+  .input-field {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  /* Mobile-optimized cards */
+  .card {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  /* Better mobile tables */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Mobile sidebar improvements */
+  .sidebar-mobile {
+    width: 280px;
+    max-width: 85vw;
+  }
+}
+
+/* Landscape mobile improvements */
+@media (max-width: 896px) and (orientation: landscape) {
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .h-screen {
+    height: 100vh;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+  .text-sm {
+    font-size: 0.75rem;
+  }
+  
+  .p-4 {
+    padding: 0.5rem;
+  }
+  
+  .gap-4 {
+    gap: 0.5rem;
+  }
+  
+  .space-y-4 > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  /* Extra small invoice adjustments */
+  #invoice-preview, #invoice-template, #temp-invoice-preview {
+    padding: 8px !important;
+    font-size: 11px !important;
+  }
+  
+  #invoice-preview table, 
+  #invoice-template table, 
+  #temp-invoice-preview table {
+    font-size: 9px !important;
+  }
+  
+  #invoice-preview th, 
+  #invoice-template th, 
+  #temp-invoice-preview th,
+  #invoice-preview td, 
+  #invoice-template td, 
+  #temp-invoice-preview td {
+    padding: 3px !important;
+    font-size: 9px !important;
+  }
+}
