@@ -17,8 +17,8 @@ load_dotenv()
 ULTRAMSG_TOKEN = os.getenv("ULTRAMSG_TOKEN")
 ULTRAMSG_INSTANCE = os.getenv("ULTRAMSG_INSTANCE")
 SERVER_BASE_URL = "https://your-server.com"
-RAZORPAY_API_KEY = os.getenv("RAZORPAY_KEY")
-RAZORPAY_API_SECRET = os.getenv("RAZORPAY_SECRET")
+RAZORPAY_API_KEY = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_API_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
 print("ULTRAMSG TOKEN:", ULTRAMSG_TOKEN)
 print("ULTRAMSG INSTANCE:", ULTRAMSG_INSTANCE)
 
@@ -35,11 +35,13 @@ def ultramsg_text_endpoint():
 
 
 
-# Razorpay client
-client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRET))
-
-# Logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Razorpay client - initialize with error handling
+try:
+    client = razorpay.Client(auth=(RAZORPAY_API_KEY, RAZORPAY_API_SECRET))
+    logging.info("Razorpay client initialized successfully")
+except Exception as e:
+    logging.error("Failed to initialize Razorpay client: %s", e)
+    client = None
 
 
 # ===== Helper: Load/Save sent reminders =====
@@ -59,6 +61,10 @@ def save_sent_reminders(data):
 def send_reminder(invoice_data, invoice_id=None):
     try:
         logging.info("Sending reminder for invoice: %s", invoice_id)
+
+        if client is None:
+            logging.error("[Reminder ERROR] Razorpay client not initialized. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env")
+            return False
 
         raw_phone = str(invoice_data["buyerInfo"]["contact"]).strip()
         digits = "".join(filter(str.isdigit, raw_phone))

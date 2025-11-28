@@ -26,18 +26,26 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
 # ---- Load environment variables ----
-RAZORPAY_KEY = os.getenv("RAZORPAY_KEY")
-RAZORPAY_SECRET = os.getenv("RAZORPAY_SECRET")
-CLOUD_NAME = os.getenv("CLOUD_NAME")
-CLOUD_API_KEY = os.getenv("CLOUD_API_KEY")
-CLOUD_API_SECRET = os.getenv("CLOUD_API_SECRET")
+# Use the same env names as in Backend/.env
+RAZORPAY_KEY = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
+CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME") or os.getenv("CLOUD_NAME")
+CLOUD_API_KEY = os.getenv("CLOUDINARY_API_KEY") or os.getenv("CLOUD_API_KEY")
+CLOUD_API_SECRET = os.getenv("CLOUDINARY_API_SECRET") or os.getenv("CLOUD_API_SECRET")
 ULTRAMSG_TOKEN = os.getenv("ULTRAMSG_TOKEN")
 ULTRAMSG_INSTANCE = os.getenv("ULTRAMSG_INSTANCE")
 SERVER_BASE_URL = os.getenv("SERVER_BASE_URL", "https://your-server.com")
 
 
 # ---- Razorpay client ----
-client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET))
+try:
+    if not RAZORPAY_KEY or not RAZORPAY_SECRET:
+        raise ValueError("Razorpay credentials missing in environment")
+    client = razorpay.Client(auth=(RAZORPAY_KEY, RAZORPAY_SECRET))
+    logging.info("Razorpay client initialized successfully (agent2)")
+except Exception as e:
+    logging.error("Failed to initialize Razorpay client (agent2): %s", e)
+    client = None
 
 # ---- Cloudinary config ----
 cloudinary.config(
@@ -88,7 +96,7 @@ def send_reminder(invoice_data, invoice_id=None):
             pass
         else:
             logging.error("[PHONE ERROR] Invalid phone number: %s", raw_phone)
-            return
+            return False
         phone = "+" + digits
         logging.info("[DEBUG] Final phone: %s", phone)
 
@@ -97,6 +105,10 @@ def send_reminder(invoice_data, invoice_id=None):
 
         # Razorpay payment link
         amount_in_paise = int(float(invoice_data["total"]) * 100)
+        if client is None:
+            logging.error("[Reminder ERROR] Razorpay client not initialized. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env")
+            return False
+
         payment = client.payment_link.create({
             "amount": amount_in_paise,
             "currency": "INR",
@@ -133,10 +145,20 @@ def send_reminder(invoice_data, invoice_id=None):
         if "error" in response.text.lower():
             logging.error("[UltraMsg ERROR] %s", response.text)
 
-        logging.info("========== REMINDER END ==========\n")
+        logging.info("========== REMINDER END ==========")
+
+        # Return True if UltraMsg returned success (HTTP 200 and no 'error' in body)
+        try:
+            if response is not None and response.status_code == 200 and "error" not in response.text.lower():
+                return True
+            else:
+                return False
+        except Exception:
+            return False
 
     except Exception as e:
         logging.error("[Reminder ERROR] %s", e)
+        return False
 
 
 # ---- Tools ----
@@ -222,22 +244,24 @@ def tool_send_payment_reminder(invoice_id: str) -> dict:
 
         invoice_data = doc.to_dict()
 
-        # Call the same reminder function you already built
-        threading.Thread(
-            target=send_reminder, 
-            args=(invoice_data, invoice_id),
-            daemon=True
-        ).start()
-
-        logging.info("[Tool] Reminder thread started successfully.")
-
-        return {
-            "status": "success",
-            "message": f"Reminder sent to customer for invoice {invoice_id}.",
-            "customer": invoice_data.get("buyerInfo", {}).get("name"),
-            "contact": invoice_data.get("buyerInfo", {}).get("contact"),
-            "total": invoice_data.get("total")
-        }
+        # Call the same reminder function synchronously so we can return the real result
+        success = send_reminder(invoice_data, invoice_id)
+        if success:
+            return {
+                "status": "success",
+                "message": f"Reminder sent to customer for invoice {invoice_id}.",
+                "customer": invoice_data.get("buyerInfo", {}).get("name"),
+                "contact": invoice_data.get("buyerInfo", {}).get("contact"),
+                "total": invoice_data.get("total")
+            }
+        else:
+            return {
+                "status": "failed",
+                "message": f"Failed to send reminder for invoice {invoice_id}. Check logs for details.",
+                "customer": invoice_data.get("buyerInfo", {}).get("name"),
+                "contact": invoice_data.get("buyerInfo", {}).get("contact"),
+                "total": invoice_data.get("total")
+            }
 
     except Exception as e:
         logging.error(f"[Reminder Tool ERROR] {e}")

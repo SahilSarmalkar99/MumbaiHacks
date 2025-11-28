@@ -5,6 +5,7 @@ from agent.agent1.invoice import workflow
 from agent.agent2.AdvCatBot import Bot
 from agent.agent3.auto_reminder import start_scheduler
 from langchain_core.messages import HumanMessage
+import threading
 
 logging.basicConfig(level=logging.INFO)
 
@@ -116,5 +117,12 @@ def agent_endpoint():
 # Start Flask App
 # ------------------------------
 if __name__ == "__main__":
-    start_scheduler()
+    # Start the reminders scheduler in a background thread so Flask isn't blocked
+    try:
+        scheduler_thread = threading.Thread(target=start_scheduler, args=(5,), daemon=True)
+        scheduler_thread.start()
+        logging.info("Started reminder scheduler thread")
+    except Exception:
+        logging.exception("Failed to start scheduler thread")
+
     app.run(host="0.0.0.0", port=8000, debug=True)
