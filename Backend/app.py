@@ -118,11 +118,11 @@ def agent_endpoint():
 # ------------------------------
 if __name__ == "__main__":
     # Start the reminders scheduler in a background thread so Flask isn't blocked
-    try:
-        scheduler_thread = threading.Thread(target=start_scheduler, args=(5,), daemon=True)
-        scheduler_thread.start()
-        logging.info("Started reminder scheduler thread")
-    except Exception:
-        logging.exception("Failed to start scheduler thread")
+    # try:
+    #     scheduler_thread = threading.Thread(target=start_scheduler, args=(5,), daemon=True)
+    #     scheduler_thread.start()
+    #     logging.info("Started reminder scheduler thread")
+    # except Exception:
+    #     logging.exception("Failed to start scheduler thread")
 
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, onLogo
     { id: 'inventory', label: 'Inventory', icon: Warehouse },
     { id: 'sale', label: 'Point of Sale', icon: ShoppingBag },
     { id: 'invoices', label: 'All Invoices', icon: FileText },
-    { id: 'gst', label: 'GST Filing', icon: Calculator },
+    // { id: 'gst', label: 'GST Filing', icon: Calculator },
     { id: 'ai-chat', label: 'AI Assistant', icon: MessageCircle },
     { id: 'profile', label: 'Profile Settings', icon: User },
   ];

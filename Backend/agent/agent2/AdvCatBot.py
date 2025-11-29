@@ -60,7 +60,7 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENROUTER")
 os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 llm = ChatOpenAI(
-    model="x-ai/grok-4.1-fast",
+    model="x-ai/grok-4.1-fast:free",
     temperature=0,
 )
 

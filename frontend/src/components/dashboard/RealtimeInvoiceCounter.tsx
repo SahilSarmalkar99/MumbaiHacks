@@ -35,7 +35,9 @@ export const RealtimeInvoiceCounter: React.FC = () => {
   const paidInvoices = invoices.filter(inv => 
     inv.buyerInfo?.status === 'paid' || inv.status === 'paid'
   ).length;
+  // Treat both 'pending' and 'sent' as pending/unpaid statuses
   const pendingInvoices = invoices.filter(inv => 
+    inv.buyerInfo?.status === 'pending' || inv.status === 'pending' ||
     inv.buyerInfo?.status === 'sent' || inv.status === 'sent'
   ).length;
   const draftInvoices = invoices.filter(inv => 

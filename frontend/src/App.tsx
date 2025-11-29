@@ -14,7 +14,7 @@ import { MobileMenu } from './components/layout/MobileMenu';
 import { Dashboard } from './components/dashboard/Dashboard';
 
 import { FirebaseInvoiceList } from './components/invoices/FirebaseInvoiceList';
-import { EditableGSTFiling } from './components/invoices/EditableGSTFiling';
+// import { EditableGSTFiling } from './components/invoices/EditableGSTFiling';
 import { ProfileSettings } from './components/profile/ProfileSettings';
 import { InventoryManager } from './components/inventory/InventoryManager';
 import { SaleCheckout } from './components/sale/SaleCheckout';
@@ -38,7 +38,7 @@ const DashboardLayout: React.FC<{ user: User; children: React.ReactNode; onLogou
     if (path === '/inventory') return 'inventory';
     if (path === '/sale') return 'sale';
     if (path === '/invoices') return 'invoices';
-    if (path === '/gst') return 'gst';
+    // if (path === '/gst') return 'gst';
     if (path === '/ai-chat') return 'ai-chat';
     if (path === '/profile') return 'profile';
     return 'dashboard';
@@ -155,12 +155,12 @@ function App() {
 
 
 
-        <Route path="/gst" element={
+        {/* <Route path="/gst" element={
           !user ? <Navigate to="/login" replace /> :
           <DashboardLayout user={user} onLogout={handleLogout}>
             <EditableGSTFiling invoices={[]} onUpdateInvoice={() => {}} />
           </DashboardLayout>
-        } />
+        } /> */}
         <Route path="/ai-chat" element={
           !user ? <Navigate to="/login" replace /> :
           <DashboardLayout user={user} onLogout={handleLogout}>

@@ -20,9 +20,13 @@ export const useRealtimeDashboard = (sellerId?: string) => {
     // Calculate total sales
     const totalSales = invoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
 
-    // Count pending invoices
+    // Count pending invoices (include both 'pending' and 'sent' statuses)
     const pendingInvoices = invoices.filter(
-      invoice => invoice.buyerInfo?.status === 'sent' || invoice.status === 'sent'
+      invoice =>
+        invoice.buyerInfo?.status === 'pending' ||
+        invoice.status === 'pending' ||
+        invoice.buyerInfo?.status === 'sent' ||
+        invoice.status === 'sent'
     ).length;
 
     // Calculate monthly revenue for last 6 months
